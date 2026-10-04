@@ -46,9 +46,17 @@ void	philo_run(void *arg)
 void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->info->fork[philo->left_fork]);
-	pthread_mutex_lock(&philo->info->fork[philo->right_fork]);
-	philo->when_last_eat = get_ms_time();
 	print_status(philo, "has taken a fork");
+	if (philo->info->philo_count == 1)
+	{
+		while (philo->info->death == 0)
+			usleep(500);
+		pthread_mutex_unlock(&philo->info->fork[philo->left_fork]);
+		return ;
+	}
+	pthread_mutex_lock(&philo->info->fork[philo->right_fork]);
+	print_status(philo, "has taken a fork");
+	philo->when_last_eat = get_ms_time();
 	print_status(philo, "is eating");
 	while (get_ms_time() - philo->when_last_eat < philo->info->eat_long)
 		usleep(600);
