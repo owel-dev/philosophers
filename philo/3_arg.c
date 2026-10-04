@@ -5,7 +5,7 @@ int	is_num(char *str)
 	int	i;
 
 	i = 0;
-	if (str == NULL)
+	if (str == NULL || str[0] == '\0')
 		return (0);
 	while (str[i] != '\0')
 	{
@@ -62,5 +62,7 @@ int	check_arg(int ac, char **av)
 			return (-1);
 		i++;
 	}
+	if (ft_atoi(av[1]) < 1)
+		return (-1);
 	return (0);
 }
