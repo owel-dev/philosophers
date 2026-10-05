@@ -99,7 +99,7 @@ int	main(int ac, char **av)
 		return (-1);
 	if (make_thread(&info) == -1)
 		return (-1);
-	while (info.death == 0)
-		usleep(500);
+	wait_threads(&info);
+	clean_info(&info);
 	return (0);
 }

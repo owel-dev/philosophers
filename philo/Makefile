@@ -6,7 +6,8 @@ RM = rm -f
 FILE = 	0_philo\
 		1_routines\
 		2_utils \
-		3_arg
+		3_arg \
+		4_end
 
 SRCS = $(addprefix ./, $(addsuffix .c, $(FILE)))
 OBJS = $(addprefix ./, $(addsuffix .o, $(FILE)))

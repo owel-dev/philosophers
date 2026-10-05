@@ -38,6 +38,8 @@ int			set_info(t_info *info, int ac, char **av);
 int			set_fork(t_info *info);
 int			set_philos(t_info *info);
 int			make_thread(t_info *info);
+void		wait_threads(t_info *info);
+void		clean_info(t_info *info);
 
 void		monitor_run(void *arg);
 void		philo_run(void *arg);

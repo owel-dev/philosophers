@@ -58,7 +58,8 @@ void	eat(t_philo *philo)
 	print_status(philo, "has taken a fork");
 	philo->when_last_eat = get_ms_time();
 	print_status(philo, "is eating");
-	while (get_ms_time() - philo->when_last_eat < philo->info->eat_long)
+	while (get_ms_time() - philo->when_last_eat < philo->info->eat_long \
+		&& philo->info->death == 0)
 		usleep(600);
 	if (philo->info->infinite == 0)
 		philo->eat_count++;
@@ -72,7 +73,8 @@ void	sleepy(t_philo *philo)
 
 	time = get_ms_time();
 	print_status(philo, "is sleeping");
-	while (get_ms_time() - time < philo->info->sleep_long)
+	while (get_ms_time() - time < philo->info->sleep_long \
+		&& philo->info->death == 0)
 		usleep(600);
 }
 
