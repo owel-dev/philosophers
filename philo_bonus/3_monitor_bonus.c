@@ -18,10 +18,8 @@ void	receive_exit(t_info *info)
 {
 	int	i;
 	int	status;
-	int	eat_count;
 
 	i = 0;
-	eat_count = 0;
 	while (i < info->philo_count)
 	{
 		waitpid(-1, &status, 0);

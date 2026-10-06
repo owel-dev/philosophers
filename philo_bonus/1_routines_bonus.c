@@ -3,7 +3,6 @@
 void	monitor_run(void *arg)
 {
 	t_philo		*philo;
-	int			i;
 
 	philo = (t_philo *)arg;
 	while (philo->info->death == 0)
@@ -11,7 +10,7 @@ void	monitor_run(void *arg)
 		if (get_ms_time() - philo->when_last_eat >= philo->info->die_long)
 		{
 			philo->info->death = 1;
-			print_status(philo->info->philos[i], "died");
+			print_status(philo, "died");
 			exit(1);
 		}
 		usleep(100);
