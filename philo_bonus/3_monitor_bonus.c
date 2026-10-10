@@ -33,7 +33,6 @@ void	receive_exit(t_info *info)
 }
 
 void	eat_monitor(void *arg)
-
 {
 	t_info	*info;
 	int		i;
@@ -45,6 +44,6 @@ void	eat_monitor(void *arg)
 		sem_wait(info->all_eat_count);
 		i++;
 	}
-	sem_wait(info->print);
+	print_all_ate(info);
 	kill_all_process(info);
 }

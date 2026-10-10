@@ -55,6 +55,7 @@ void		think(t_philo *philo);
 
 long long	get_ms_time(void);
 void		print_status(t_philo *philo, char *str);
+void		print_all_ate(t_info *info);
 
 int			ft_isdigit(int c);
 void		kill_all_process(t_info *info);

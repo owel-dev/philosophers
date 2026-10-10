@@ -28,3 +28,15 @@ void	clean_info(t_info *info)
 	free(info->fork);
 	free(info->philos);
 }
+
+void	print_all_ate(t_info *info)
+{
+	pthread_mutex_lock(&info->print);
+	if (info->death == 0)
+	{
+		info->death = 1;
+		printf("%lld all philosophers have eaten %d times\n", \
+			get_ms_time() - info->philos[0]->when_start, info->must_eat);
+	}
+	pthread_mutex_unlock(&info->print);
+}

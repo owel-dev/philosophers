@@ -25,7 +25,7 @@ void	monitor_run(void *arg)
 			usleep(500);
 		}
 		if (all_must_eat == 1)
-			info->death = 1;
+			print_all_ate(info);
 	}
 }
 

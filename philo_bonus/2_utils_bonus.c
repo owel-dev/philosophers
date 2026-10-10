@@ -18,3 +18,10 @@ void	print_status(t_philo *philo, char *str)
 	if (philo->info->death == 0)
 		sem_post(philo->info->print);
 }
+
+void	print_all_ate(t_info *info)
+{
+	sem_wait(info->print);
+	printf("%lld all philosophers have eaten %d times\n", \
+		get_ms_time() - info->philos[0]->when_start, info->must_eat);
+}
