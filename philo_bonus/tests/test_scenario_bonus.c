@@ -48,6 +48,8 @@ typedef struct s_run
 	int		timed_out;
 	int		exit_code;
 	int		sig;
+	size_t	all_ate_line;
+	int		all_ate_times;
 }	t_run;
 
 typedef struct s_timing
@@ -235,6 +237,25 @@ static int	parse_event(const char *line, t_event *out)
 	return (0);
 }
 
+static int	parse_all_ate(const char *line, int *times)
+{
+	char	*end;
+	long	n;
+
+	n = strtol(line, &end, 10);
+	if (end == line || n < 0 || *end != ' ')
+		return (0);
+	line = end + 1;
+	if (strncmp(line, "all philosophers have eaten ", 28) != 0)
+		return (0);
+	line += 28;
+	n = strtol(line, &end, 10);
+	if (end == line || n < 0 || n > INT_MAX || strcmp(end, " times") != 0)
+		return (0);
+	*times = (int)n;
+	return (1);
+}
+
 static void	take_line(t_run *run, const char *line)
 {
 	t_event	event;
@@ -242,6 +263,8 @@ static void	take_line(t_run *run, const char *line)
 	run->line_count++;
 	if (parse_event(line, &event))
 		push_event(run, event);
+	else if (parse_all_ate(line, &run->all_ate_times))
+		run->all_ate_line = run->line_count;
 	else if (!run->has_bad_line)
 	{
 		run->has_bad_line = 1;
@@ -484,6 +507,9 @@ static void	check_output_is_well_formed(const t_run *run, int count)
 	if (deaths > 0)
 		CHECK_MSG(strcmp(run->events[run->event_count - 1].state, "died") == 0,
 			"%s: output continues after a death", run->label);
+	if (run->all_ate_line > 0)
+		CHECK_MSG(run->all_ate_line == run->line_count,
+			"%s: output continues after reporting everyone has eaten", run->label);
 }
 
 static void	check_death_is_announced_on_time(const t_run *run, long time_to_die)
@@ -549,12 +575,16 @@ static void	철학자_5명_모두_7번_먹으면_멈추기(void)
 	size_t		meals;
 	int			who;
 
-	scenario(args, "nobody dies, stops once everyone has eaten 7 times");
+	scenario(args, "nobody dies, reports everyone has eaten 7 times and stops");
 	run = philo(args, DEADLINE_MS);
 	check_output_is_well_formed(&run, 5);
 	CHECK_MSG(!run.timed_out, "%s: did not stop on its own", run.label);
 	CHECK_MSG(run.exit_code == 0, "%s: exit code %d", run.label, run.exit_code);
 	CHECK_MSG(count_of(&run, "died", 0) == 0, "%s: somebody died", run.label);
+	CHECK_MSG(run.all_ate_line > 0, "%s: did not report that everyone has eaten", run.label);
+	if (run.all_ate_line > 0)
+		CHECK_MSG(run.all_ate_times == 7, "%s: reported %d meals instead of 7",
+			run.label, run.all_ate_times);
 	who = 1;
 	while (who <= 5)
 	{
